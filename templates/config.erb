@@ -1,0 +1,154 @@
+<%- if !@features.empty? and @action != 'Uninstall' or @action != 'RunDiscovery'
+  featurestab = @features.split(',')
+  featurestab.each do |feature|
+    if feature == 'AS' && @assvcaccount.empty?
+      scope.function_fail(['You have activate AS Feature but not specify a service account for him'])
+    end
+    if feature == 'IS' && @issvcaccount.empty?
+      scope.function_fail(['You have activate IS Feature but not specify a service account for him'])
+    end
+    if feature == 'RS' && @rssvcaccount.empty?
+      scope.function_fail(['You have activate RS Feature but not specify a service account for him'])
+    end
+  end
+end 
+if(@action == 'RunDiscovery')
+-%>
+[OPTIONS]
+; Default parameters
+ACTION="<%= @action %>"
+<%-
+else
+-%>
+;SQLSERVER2012 Configuration File
+[OPTIONS]
+; Default parameters
+ACTION="<%= @action %>"
+ENU="<%= @enu %>"
+HELP="<%= @help %>"
+INDICATEPROGRESS="<%= @indicateprogress %>"
+QUIET="<%= @quiet %>"
+QUIETSIMPLE="<%= @quietsimple %>"
+X86="<%= @x86 %>"
+<% if !@uimode.empty? %>
+UIMODE="<%= @uimode %>"
+<% end %>
+<% if @action != 'Uninstall' %>
+SQMREPORTING="<%= @sqmreporting %>"
+ERRORREPORTING="<%= @errorreporting %>"
+<% if !@sqlcollation.empty? %>
+SQLCOLLATION="<%= @sqlcollation %>"
+<% end -%>
+TCPENABLED="<%= @tcpenabled %>"
+NPENABLED="<%= @npenabled %>"
+BROWSERSVCSTARTUPTYPE="<%= @browsersvcstartuptype %>"
+<% end -%>
+IACCEPTSQLSERVERLICENSETERMS="<%= @iacceptsqlserverlicenseterms %>"
+
+<% if @action != 'Uninstall' %>
+ENABLERANU="<%= @enableranu %>"
+FILESTREAMLEVEL="<%= @filestreamlevel %>"
+<% if !@pid.empty?%>
+PID="<%= @pid %>"
+<% end -%>
+<% if @sqlsysadminaccounts %>
+; Windows account(s) to provision as SQL Server system administrators.
+SQLSYSADMINACCOUNTS="<%= `powershell write-host $env:userdomain -nonewline` %>\<%= @sqlsysadminaccounts %>"
+<% end -%>
+
+ADDCURRENTUSERASSQLADMIN="<%= @addcurrentuserassqladmin %>"
+<% end -%>
+
+<% if (@securitymode.upcase) == 'SQL' and @action != 'Uninstall'%>
+SECURITYMODE="<%= @securitymode.upcase %>"
+SAPWD="<%= @sapwd %>"
+<% end -%>
+
+; Specifies features to install, uninstall, or upgrade. The list of top-level features include SQL, AS, RS, IS, and Tools. The SQL feature will install the database engine, replication, and full-text. The Tools feature will install Management Tools, Books online, Business Intelligence Development Studio, and other shared components.
+FEATURES="<%= @features %>"
+
+; Instance parameters
+<% if !@instancename.empty? -%>
+INSTANCENAME="<%= @instancename %>"
+<% else %>
+INSTANCENAME="MSSQLSERVER" 
+<% end %>
+<% if !@instanceid.empty? %>
+INSTANCEID="<%= @instanceid %>"
+<% end %>
+<% if !@instancedir.empty? %>
+INSTANCEDIR="<%= @instancedir %>"
+<% end %>
+
+<% if @action != 'Uninstall' %>
+<% if !@agtsvcaccount.empty? %>
+; Information for SQL Agent
+AGTSVCACCOUNT="<%= `powershell write-host $env:userdomain -nonewline` %>\<%= @agtsvcaccount %>"
+AGTSVCPASSWORD="<%= @agtpwd %>"
+AGTSVCSTARTUPTYPE="<%= @agtsvcstartuptype %>"
+<% end %>
+
+<% if !@sqlsvcaccount.empty? %>
+; Information for SQL Server service.
+SQLSVCACCOUNT="<%= `powershell write-host $env:userdomain -nonewline` %>\<%= @sqlsvcaccount %>"
+SQLSVCPASSWORD="<%= @sqlpwd %>"
+SQLSVCSTARTUPTYPE="<%= @sqlsvcstartuptype %>"
+<% end %>
+
+<% if !@rssvcaccount.empty? %>
+; Information for Reporting Services
+RSSVCACCOUNT="<%= `powershell write-host $env:userdomain -nonewline` %>\<%= @rssvcaccount %>"
+RSSVCPASSWORD="<%= @rspwd %>"
+RSSVCSTARTUPTYPE="<%= @rssvcstartuptype %>"
+RSINSTALLMODE="<%= @rsinstallmode %>"
+<% end %>
+
+<% if !@issvcaccount.empty? %>
+; Information for Integration Services
+ISSVCACCOUNT="<%= `powershell write-host $env:userdomain -nonewline` %>\<%= @issvcaccount %>"
+ISSVCPASSWORD="<%= @ispwd %>"
+ISSVCSTARTUPTYPE="<%= @issvcstartuptype %>"
+<% end %>
+
+<% if !@assvcaccount.empty? %>
+; Information for analysis services.
+ASSVCACCOUNT="<%= `powershell write-host $env:userdomain -nonewline` %>\<%= @assvcaccount %>"
+ASSVCPASSWORD="<%= @aspwd %>"
+ASSVCSTARTUPTYPE="<%= @assvcstartuptype %>"
+
+<% if !@asdatadir.empty? %>
+ASDATADIR=<%= "@asdatadir" %>
+<% end %>
+
+<% if !@aslogdir.empty? %>
+; The location for the Analysis Services log files.
+ASLOGDIR=<%= @aslogdir %>
+<% end %>
+
+<% if !@asbackupdir.empty? %>
+; The location for the Analysis Services backup files.
+ASBACKUPDIR="<%= @asbackupdir %>"
+<% end %>
+
+<% if !@astempdir.empty? %>
+; The location for the Analysis Services temporary files.
+ASTEMPDIR="<%= @astempdir %>"
+<% end %>
+
+<% if !@asconfigdir.empty? %>
+; The location for the Analysis Services configuration files.
+ASCONFIGDIR="<%= @asconfigdir %>"
+<% end %>
+
+<% if !@ascollation.empty? %>
+ASCOLLATION="<%= @ascollation %>"
+<% end -%>
+
+; Specifies the AS service administrator.
+ASSYSADMINACCOUNTS="<%= @assysadminaccounts %>"
+
+; Specifies whether or not the MSOLAP provider is allowed to run in process.
+ASPROVIDERMSOLAP="1"
+<% end %>
+<% end %>
+<% end %>

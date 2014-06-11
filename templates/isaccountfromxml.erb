@@ -1,0 +1,15 @@
+<%=
+require 'rexml/document'
+if (File.size?(@userxml) != nil)
+  file = File.new(@userxml)
+  doc = REXML::Document.new file
+  root = doc.root
+  users = root.elements["users"]
+  users.elements.map do | user |
+    if (user.attributes['name'] == @issvcaccount)
+      pwd = user.attributes['password']
+       return pwd
+    end
+  end
+end
+%>

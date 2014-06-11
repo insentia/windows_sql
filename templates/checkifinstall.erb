@@ -1,0 +1,25 @@
+$letter = $null;
+if(('<%= @sqlpath %>' -ne '') -and (test-path '<%= @sqlpath %>'))
+{Push-Location;cd <%= @sqlpath %>; .\setup.exe /ACTION=RunDiscovery;Pop-Location;}
+elseif(('<%= @xmlpath %>' -ne '') -and (test-path '<%= @xmlpath %>') ){
+[xml]$xml = New-Object system.Xml.XmlDocument;[xml]$xml = Get-Content '<%= @xmlpath %>';
+foreach($iso in $xml.configuration.isos.iso){if($iso.ImagePath -eq '<%= @isopath %>'){$letter = $iso.DriveLetter;}}
+if($letter -ne $null){Push-Location;cd $letter':';
+.\setup.exe /ACTION=RunDiscovery;
+Pop-Location;}}
+else{exit 1}
+$folder = $null;
+$result = $null;
+$logpath = 'C:\Program Files\Microsoft SQL Server\110\Setup Bootstrap\Log\';
+if(test-path $logpath){
+foreach($item in (get-childitem $logpath -exclude *.txt | Sort-object LastWriteTime -descending)){$folder = $item.FullName;break;}
+if(test-path $folder){$file = $folder+"\SqlDiscoveryReport.xml";if(test-path $file){
+[xml]$xmlsql = New-Object system.Xml.XmlDocument;[xml]$xmlsql = Get-Content $file;
+$result = $xmlsql.ArrayOfDiscoveryInformation.DiscoveryInformation.Product;
+}}
+if($result.count -ge 0){
+if(($result -eq 'None') -and ('<%= @action %>' -eq 'Uninstall')){exit 1}
+elseif(($result -ne 'None' -or ($result[0] -like 'Microsoft SQL Server')) -and ('<%= @action %>' -eq 'Install')){exit 1}
+else{return $true}
+}else{exit 1;}
+}else{exit 1;}
