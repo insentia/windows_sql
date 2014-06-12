@@ -13,12 +13,11 @@ Should work, on Windows Server since 2012 and with SQL Server since 2012.
 
 
 ##Last Fix/Update
-v 0.0.1 Module creation:
- - Read password from users.xml
- - Majority of sql installation parameters is available (based on [MSDN](http://msdn.microsoft.com/en-us/library/ms144259(v=sql.110).aspx))
- - Some verification are made for prevent bad use of variable.
- - You can use only Action Install, Uninstall. Others are not tested yet. Action RunDiscovery is used to test if SQL is already install or not
-
+v 0.0.2 Module creation:
+ - Add function get_password for retrieve password from users.xml function.(windows_ad module)
+ - Removed unused templates
+ - should work with a puppetmaster
+ 
 ## Generate configurationfile.ini
 Generate Microsoft SQL Server 2012 file configuration from parameters you define.
 If you create your service account with [windows_ad module](https://forge.puppetlabs.com/jriviere/windows_ad) and his xml file before calling the windows_sql class the password for each service account will be automatically retrieve from the users.xml file, 
@@ -26,17 +25,13 @@ else you can provide manually your password.
 
 The user domain doesn't need to be provided, it will be supplied by the $env:userdomain powershell variable for each service account variable (like AGTSVCACCOUNT) and SQLSYSADMINACCOUNTS
 
-PS : since we can't reassign variable or access variable data inside a resource definition, 
-it was mandatory to create template for retrieve password in xml for each SQL account we need :(.
-If anyone have a idea to do that stuff with only one template it will be great.
-
 ##Setup Requirements
 Depends on the following modules:
  - ['joshcooper/powershell', '>=0.0.6'](https://forge.puppetlabs.com/joshcooper/powershell),
  - ['puppetlabs/stdlib', '>= 4.2.1'](https://forge.puppetlabs.com/puppetlabs/stdlib).
  + Optional
    - ['jriviere/windows_isos', '>= 0.0.3'](https://forge.puppetlabs.com/jriviere/windows_isos) (if you supply $isopath variable),
-   - ['jriviere/windows_ad', '>= 0.0.9'](https://forge.puppetlabs.com/jriviere/windows_ad)] (fill password automatically for each account specified with this module and with his xml file)
+   - ['jriviere/windows_ad', '>= 0.1.0'](https://forge.puppetlabs.com/jriviere/windows_ad)] (fill password automatically for each account specified with this module and with his xml file)
 
 ## Example
 ```

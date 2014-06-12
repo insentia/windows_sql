@@ -156,7 +156,7 @@ class windows_sql::params (
   }
   if(!empty($agtsvcaccount)){
     if(empty($agtsvcpassword)){
-      $agtpwd = template('windows_sql/agtaccountfromxml.erb')
+      $agtpwd = get_password($agtsvcaccount,$userxml)
 	  if (unique($agtpwd) =~ 'nil' or empty($agtpwd)){
         fail('You specified a account for the SQL Agent service but doesn\'t provide a password for it. Please fill the xml or the parameters in your manifest')
       }
@@ -166,7 +166,7 @@ class windows_sql::params (
   }
   if(!empty($sqlsvcaccount)){
     if(empty($sqlsvcpassword)){
-      $sqlpwd = template('windows_sql/sqlaccountfromxml.erb')
+      $sqlpwd = get_password($sqlsvcaccount,$userxml)
 	  if (unique($sqlpwd) =~ 'nil' or empty($sqlpwd)){
        fail('You specified a account for the SQL service but doesn\'t provide a password for it. Please fill the xml or the parameters in your manifest')
       }
@@ -176,7 +176,7 @@ class windows_sql::params (
   }
   if(!empty($rssvcaccount)){
     if(empty($rssvcpassword)){
-      $rspwd = template('windows_sql/rsaccountfromxml.erb')
+      $rspwd = get_password($rssvcaccount,$userxml)
 	  if (unique($rspwd) =~ 'nil' or empty($rspwd)){
        fail('You specified a account for the Reporting service but doesn\'t provide a password for it. Please fill the xml or the parameters in your manifest')
       }
@@ -186,7 +186,7 @@ class windows_sql::params (
   }
   if(!empty($issvcaccount)){
     if(empty($issvcpassword)){
-      $ispwd = template('windows_sql/isaccountfromxml.erb')
+      $ispwd = get_password($issvcaccount,$userxml)
 	  if (unique($ispwd) =~ 'nil' or empty($ispwd)){
        fail('You specified a account for the Integration service but doesn\'t provide a password for it. Please fill the xml or the parameters in your manifest')
       }
@@ -196,7 +196,7 @@ class windows_sql::params (
   }
   if(!empty($assvcaccount)){
     if(empty($assvcpassword)){
-      $aspwd = template('windows_sql/asaccountfromxml.erb')
+      $aspwd = get_password($assvcaccount,$userxml)
 	  if (unique($aspwd) =~ 'nil' or empty($aspwd)){
        fail('You specified a account for the Analysis service but doesn\'t provide a password for it. Please fill the xml or the parameters in your manifest')
       }

@@ -1,6 +1,6 @@
 {
   "name": "jriviere-windows_sql",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "source": "https://github.com/ninja-2/windows_sql",
   "author": "jriviere",
   "license": "Apache License, Version 2.0",
@@ -20,22 +20,21 @@
   "types": [
 
   ],
-  "operatingsystem_support": [{ "operatingsystem": "Windows" }],
+  "operatingsystem_support": [
+    {
+      "operatingsystem": "Windows"
+    }
+  ],
   "checksums": {
-    "Modulefile": "dfb66fd4f96b1d43ac978a3358cbb463",
-    "README.md": "52a9a4ddbbf61f64c927d9204fb50c1e",
+    "Modulefile": "882434e89c39021d7ee99f13595e5134",
+    "README.md": "a30043bfc53e6b0ede08cde705409a3a",
     "manifests/init.pp": "db109f504a17ec931c4fd9f231f449f4",
     "manifests/install.pp": "0060817880b167baebc58a0d77b025e3",
-    "manifests/params.pp": "7636615d4545e4c67992c113bc71d3b2",
+    "manifests/params.pp": "21bc502f72d02f6ef5297ae9cb47caaa",
     "spec/spec_helper.rb": "09ccbe4bbe4503df6281e6ec7977973d",
-    "templates/agtaccountfromxml.erb": "17585e63f06e725d9afc9856183bc109",
-    "templates/asaccountfromxml.erb": "06aa38c2c8b847eef40c81be3ac0da80",
     "templates/checkifinstall.erb": "779d1ac328f1f585a6647f0f04448444",
     "templates/config.erb": "83f4d9c96e9dc621a9e0623b68cef059",
     "templates/install.erb": "aebaa846a63ac0ef7a3f27e5f72b59a0",
-    "templates/isaccountfromxml.erb": "cb04541254d2e385928ca8521f378936",
-    "templates/rsaccountfromxml.erb": "8690f9e76263fa6e9b593913182a3076",
-    "templates/sqlaccountfromxml.erb": "f4e8ef35da4a45e37c6304f46466c09d",
     "tests/init.pp": "5a561d31ee2ca48295b4722b203600b1"
   }
 }
