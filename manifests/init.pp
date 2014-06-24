@@ -23,8 +23,8 @@ class windows_sql (
   # Default option for SQL install
   $action                         = 'Install',
   $enu                            = true,
-  $quiet                          = false,
-  $quietsimple                    = true,
+  $quiet                          = true,
+  $quietsimple                    = false,
   $uimode                         = '',
   $help                           = false,
   $indicateprogress               = false,
@@ -99,6 +99,7 @@ class windows_sql (
   $configurationfile              = 'C:\\configurationfile.ini',
   
   $userxml                        = 'C:\\users.xml',              #path of users xml file for load automatically his password
+  $mode                           = 'agent',                      # mode for getting back from xml the svc account password. Default 'agent'. Other value 'master'
   
   ## Installation parameters
   $sqlpath                        = '',
@@ -174,9 +175,10 @@ class windows_sql (
     sapwd                        => $sapwd,
     pid                          => $pid,
     addcurrentuserassqladmin     => $addcurrentuserassqladmin,
-	configurationfile            => $configurationfile,
-	
-	userxml                      => $userxml,
+    configurationfile            => $configurationfile,
+
+    userxml                      => $userxml,
+    mode                         => $mode,
   }
 
   class {'windows_sql::install' :
@@ -193,10 +195,12 @@ class windows_sql (
       isopath  => $isopath,
       xmlpath  => $xmlpath,
     }
-    File["$configurationfile"] -> Windows_isos['SQLServer'] -> Class['windows_sql::install']
+    if($mode == 'agent'){
+	  File["$configurationfile"] -> Windows_isos['SQLServer'] -> Class['windows_sql::install']
+    }elsif($mode == 'master'){
+      File["$configurationfile.ps1"] -> Windows_isos['SQLServer'] -> Class['windows_sql::install']
+    }else{}
   }else{
     File["$configurationfile"] -> Class['windows_sql::install']
   }
-
-
 }

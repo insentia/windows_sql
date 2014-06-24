@@ -87,7 +87,8 @@ class windows_sql::params (
   $configurationfile            = $configurationfile,
 
   #use for load password. Default C:\\users.xml
-  $userxml                      = $userxml,
+  $userxml                      = $userxml, 
+  $mode                         = $mode,
 ){  
   # String Validation
   validate_string($instancename)
@@ -121,7 +122,8 @@ class windows_sql::params (
   validate_re($npenabled, '^(0|1)$', 'valid values for npenabled are \'0\' or \'1\'')
   validate_re($filestreamlevel, '^(0|1)$', 'valid values for filestreamlevel are \'0\' or \'1\'')
   validate_re($asservermode, '^(MULTIDIMENSIONAL|POWERPIVOT|TABULAR)$', 'valid values for ASSERVERMODE are \'MULTIDIMENSIONAL\' or \'POWERPIVOT\' or \'TABULAR\' in uppercase ')
-
+  validate_re($mode, '^(agent|master)$', 'valid values for mode are \'agent\' or \'master\'')
+  
   # Startup type Validation
   validate_re($browsersvcstartuptype, '^(Disabled|Automatic|Manual)$', 'valid values for browsersvcstartuptype are \'Disabled\' or \'Automatic\' or \'Manual\'')
   validate_re($agtsvcstartuptype, '^(Disabled|Automatic|Manual)$', 'valid values for agtsvcstartuptype are \'Disabled\' or \'Automatic\' or \'Manual\'')
@@ -154,62 +156,36 @@ class windows_sql::params (
   if(empty($features) and $config == 'Install'){
     fail('You try to install SQL Server without specify any feature, this is not possible !!')
   }
-  if(!empty($agtsvcaccount)){
-    if(empty($agtsvcpassword)){
-      $agtpwd = get_password($agtsvcaccount,$userxml)
-	  if (unique($agtpwd) =~ 'nil' or empty($agtpwd)){
-        fail('You specified a account for the SQL Agent service but doesn\'t provide a password for it. Please fill the xml or the parameters in your manifest')
-      }
-    }else{
-      $agtpwd = $agtsvcpassword
-    }
-  }
-  if(!empty($sqlsvcaccount)){
-    if(empty($sqlsvcpassword)){
-      $sqlpwd = get_password($sqlsvcaccount,$userxml)
-	  if (unique($sqlpwd) =~ 'nil' or empty($sqlpwd)){
-       fail('You specified a account for the SQL service but doesn\'t provide a password for it. Please fill the xml or the parameters in your manifest')
-      }
-    }else{
-      $sqlpwd = $agtsvcpassword
-    }
-  }
-  if(!empty($rssvcaccount)){
-    if(empty($rssvcpassword)){
-      $rspwd = get_password($rssvcaccount,$userxml)
-	  if (unique($rspwd) =~ 'nil' or empty($rspwd)){
-       fail('You specified a account for the Reporting service but doesn\'t provide a password for it. Please fill the xml or the parameters in your manifest')
-      }
-    }else{
-      $rspwd = $rssvcpassword
-    }
-  }
-  if(!empty($issvcaccount)){
-    if(empty($issvcpassword)){
-      $ispwd = get_password($issvcaccount,$userxml)
-	  if (unique($ispwd) =~ 'nil' or empty($ispwd)){
-       fail('You specified a account for the Integration service but doesn\'t provide a password for it. Please fill the xml or the parameters in your manifest')
-      }
-    }else{
-      $ispwd = $issvcpassword
-    }
-  }
   if(!empty($assvcaccount)){
-    if(empty($assvcpassword)){
-      $aspwd = get_password($assvcaccount,$userxml)
-	  if (unique($aspwd) =~ 'nil' or empty($aspwd)){
-       fail('You specified a account for the Analysis service but doesn\'t provide a password for it. Please fill the xml or the parameters in your manifest')
-      }
-    }else{
-      $aspwd = $assvcpassword
-    }
-    validate_re($asservermode, '^(MULTIDIMENSIONAL|POWERPIVOT|TABULAR)$', 'valid values for ASSERVERMODE are \'MULTIDIMENSIONAL\' or \'POWERPIVOT\' or \'TABULAR\' in uppercase ')
+    validate_re($asservermode, '^(MULTIDIMENSIONAL|POWERPIVOT|TABULAR)$', 'valid values for ASSERVERMODE #are \'MULTIDIMENSIONAL\' or \'POWERPIVOT\' or \'TABULAR\' in uppercase ')
     if(empty($assysadminaccounts)){
       fail('Analysis Administrator account must be set when you set the as svc account')
     }
-  }
-  file { "$configurationfile":
-    content => template('windows_sql/config.erb'),
-    replace => yes,
+  }  
+  if($mode == 'agent'){
+    class{'windows_sql::autocomplete':}
+    $agtpwd = $windows_sql::autocomplete::agtpwd
+    $sqlpwd = $windows_sql::autocomplete::sqlpwd
+    $ispwd  = $windows_sql::autocomplete::ispwd
+    $aspwd  = $windows_sql::autocomplete::aspwd
+    $rspwd  = $windows_sql::autocomplete::rspwd
+
+    file { "$configurationfile":
+      content => template('windows_sql/config.erb'),
+      replace => yes,
+    }
+  }elsif($mode == 'master'){
+  ## execute this in with master mode and autocomplete
+    file{"$configurationfile.ps1":
+      content => template('windows_sql/configps.erb'),
+      replace => yes,
+    }
+    exec{"Generate $configurationfile":
+      provider => powershell,
+      command  => "$configurationfile.ps1",
+      require  => File["$configurationfile.ps1"],
+    }
+  }else{
+    fail('You have to specify a deployment mode: "agent" or "master"')
   }
 }

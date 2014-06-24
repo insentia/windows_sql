@@ -1,5 +1,5 @@
 name    'jriviere-windows_sql'
-version '0.0.2'
+version '0.0.3'
 dependency 'joshcooper/powershell', '>=0.0.6'
 dependency 'puppetlabs/stdlib', '>= 4.2.1'
 source 'https://github.com/ninja-2/windows_sql'

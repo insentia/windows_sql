@@ -1,0 +1,135 @@
+function Get-Password(){
+Param([Parameter(Mandatory = $true)][String] $account,[Parameter(Mandatory = $true)][String] $userxml)
+[xml]$xml = New-Object system.Xml.XmlDocument
+[xml]$xml = Get-Content $userxml
+foreach($user in $xml.configuration.users.user){if($user.name -eq $account){return $user.password;}}
+}
+$file = "<%= @configurationfile %>"
+$featurestab = "<%= @features %>".split(',');
+$action = "<%= @action%>";
+foreach($feature in $featurestab){
+  if (($feature -eq 'AS') -and ( "<%= @assvcaccount %>" -eq "")){write-error 'You have activate AS Feature but not specify a service account for him';exit 1}
+  if (($feature -eq 'IS') -and ( "<%= @issvcaccount %>" -eq "")){write-error 'You have activate IS Feature but not specify a service account for him'; exit 1;}
+  if (($feature -eq 'RS') -and ( "<%= @rssvcaccount %>" -eq "")){write-error 'You have activate RS Feature but not specify a service account for him'; exit 1;}
+}
+
+if($action -eq 'Install'){   ##install
+    if("<%= @agtsvcaccount %>" -ne ""){if("<%= @agtsvcpassword %>" -eq ""){$agtpwd = Get-Password -account "<%= @agtsvcaccount %>" -userxml "<%= @userxml %>"}else{$agtpwd = "<%= @agtsvcpassword %>";}}
+    if("<%= @sqlsvcaccount %>" -ne ""){if("<%= @sqlsvcpassword %>" -eq ""){$sqlpwd = Get-Password -account "<%= @sqlsvcaccount %>" -userxml "<%= @userxml %>"}else{$sqlpwd = "<%= @sqlsvcpassword %>";}}
+    if("<%= @issvcaccount %>" -ne ""){if("<%= @issvcpassword %>" -eq ""){$ispwd = Get-Password -account "<%= @issvcaccount %>" -userxml "<%= @userxml %>"}else{$ispwd = "<%= @issvcpassword %>";}}
+    if("<%= @assvcaccount %>" -ne ""){if("<%= @assvcpassword %>" -eq ""){$aspwd = Get-Password -account "<%= @assvcaccount%>" -userxml "<%= @userxml %>"}else{$aspwd = "<%= @assvcpassword %>"}}
+    if("<%= @rssvcaccount %>" -ne ""){if("<%= @rssvcpassword %>" -eq ""){$rspwd = Get-Password -account "<%= @rssvcaccount %>" -userxml "<%= @userxml %>"}else{$rspwd = "<%= @rssvcpassword %>"}}
+     
+    echo ';SQL Server 2012 - params' > $file;
+    echo [OPTIONS] >> $file;
+    echo ACTION='"<%= @action %>"' >> $file;
+    echo ENU='"<%= @enu %>"' >> $file;
+    echo HELP='"<%= @help %>"' >> $file;
+    echo INDICATEPROGRESS='"<%= @indicateprogress %>"' >> $file;
+    echo QUIET='"<%= @quiet %>"' >> $file;
+    echo QUIETSIMPLE='"<%= @quietsimple %>"' >> $file;
+    echo X86='"<%= @x86 %>"' >> $file;
+
+    if( "<%= @uimode %>" -ne ""){ echo UIMODE='"<%= @uimode %>"' >> $file; }
+
+    echo SQMREPORTING='"<%= @sqmreporting %>"'
+    echo ERRORREPORTING='"<%= @errorreporting %>"'    
+
+    if( "<%= @sqlcollation %>" -ne ""){ echo SQLCOLLATION='"<%= @sqlcollation %>"' >> $file; }
+
+    echo TCPENABLED='"<%= @tcpenabled %>"' >> $file;
+    echo NPENABLED='"<%= @npenabled %>"' >> $file;
+    echo BROWSERSVCSTARTUPTYPE='"<%= @browsersvcstartuptype %>"' >> $file;
+        
+    echo IACCEPTSQLSERVERLICENSETERMS='"<%= @iacceptsqlserverlicenseterms %>"' >> $file;
+
+    if( "<%= @sqlsysadminaccounts %>" -ne "" ){ echo SQLSYSADMINACCOUNTS="""$env:userdomain\<%= @sqlsysadminaccounts %>""" >> $file; }
+    
+    if( "<%= @securitymode %>" -match 'SQL'){
+        echo SECURITYMODE='"<%= @securitymode.upcase %>"' >> $file;
+        echo SAPWD='"<%= @sapwd %>"' >> $file;
+    }
+    echo ADDCURRENTUSERASSQLADMIN='"<%= @addcurrentuserassqladmin %>"' >> $file;
+
+    echo FEATURES='"<%= @features %>"' >> $file;
+
+    if( "<%= @instancename %>" -ne ""){ echo INSTANCENAME='"<%= @instancename %>"' >> $file;}else{echo INSTANCENAME="MSSQLSERVER" >> $file;}
+    if( "<%= @instanceid %>" -ne ""){ echo INSTANCEID='"<%= @instanceid %>"' >> $file; }
+    if( "<%= @instancedir %>" -ne ""){ echo INSTANCEDIR='"<%= @instancedir %>"' >> $file; }
+
+    if( "<%= @agtsvcaccount %>" -ne ""){
+        echo AGTSVCACCOUNT="""$env:userdomain\<%= @agtsvcaccount %>""" >> $file;
+        echo AGTSVCPASSWORD="""$agtpwd""" >> $file;
+        echo AGTSVCSTARTUPTYPE='"<%= @agtsvcstartuptype %>"' >> $file;
+    }
+    if("<%= @sqlsvcaccount %>" -ne ""){
+        echo SQLSVCACCOUNT="""$env:userdomain\<%= @sqlsvcaccount %>""" >> $file;
+        echo SQLSVCPASSWORD="""$sqlpwd""" >> $file;
+        echo SQLSVCSTARTUPTYPE='"<%= @sqlsvcstartuptype %>"' >> $file;
+    }    
+    if("<%= @rssvcaccount %>" -ne ""){
+        echo RSSVCACCOUNT="""$env:userdomain\<%= @rssvcaccount %>""" >> $file;
+        echo RSSVCPASSWORD="""$rspwd""" >> $file;
+        echo RSSVCSTARTUPTYPE='"<%= @rssvcstartuptype %>"' >> $file;
+        echo RSINSTALLMODE='"<%= @rsinstallmode %>"' >> $file;
+    }
+    if("<%= @issvcaccount %>" -ne ""){
+        echo ISSVCACCOUNT="""$env:userdomain\<%= @issvcaccount %>""" >> $file;
+        echo ISSVCPASSWORD="""$ispwd""" >> $file;
+        echo ISSVCSTARTUPTYPE='"<%= @issvcstartuptype %>"' >> $file;
+    }
+    if("<%= @assvcaccount %>" -ne ""){
+        echo ASSVCACCOUNT="""$env:userdomain\<%= @assvcaccount %>""" >> $file;
+        echo ASSVCPASSWORD="""$aspwd""" >> $file;
+        echo ASSVCSTARTUPTYPE='"<%= @assvcstartuptype %>"' >> $file;
+        if("<%= @asdatadir %>" -ne ""){
+            echo ASDATADIR='"<%= @asdatadir %>"' >> $file;
+        }
+        if("<%= @aslogdir %>" -ne ""){
+            echo ASLOGDIR='"<%= @aslogdir %>"' >> $file;
+        }
+        if("<%= @asbackupdir %>" -ne ""){
+            echo ASBACKUPDIR='"<%= @asbackupdir %>"' >> $file;
+        }
+        if("<%= @astempdir %>" -ne ""){
+            echo ASTEMPDIR='"<%= @astempdir %>"' >> $file;
+        }
+        if("<%= @asconfigdir %>" -ne ""){
+            echo ASCONFIGDIR='"<%= @asconfigdir %>"' >> $file;
+        }
+        if("<%= @ascollation %>" -ne ""){
+            echo ASCOLLATION='"<%= @ascollation %>"' >> $file;
+        }
+
+        echo ; Specifies the AS service administrator. >> $file;
+        echo ASSYSADMINACCOUNTS="<%= @assysadminaccounts %>" >> $file;
+
+        echo ; Specifies whether or not the MSOLAP provider is allowed to run in process. >> $file;
+        echo ASPROVIDERMSOLAP="1" >> $file;
+    }
+}elseif($action -eq 'Uninstall'){
+    echo ';SQL Server 2012 - params' > $file;
+    echo [OPTIONS] >> $file;
+    echo '; Default parameters' >> $file;
+    echo ACTION='"<%= @action %>"' >> $file;
+    echo ENU='"<%= @enu %>"' >> $file;
+    echo HELP='"<%= @help %>"' >> $file;
+    echo INDICATEPROGRESS='"<%= @indicateprogress %>"' >> $file;
+    echo QUIET='"<%= @quiet %>"' >> $file;
+    echo QUIETSIMPLE='"<%= @quietsimple %>"' >> $file;
+    echo X86='"<%= @x86 %>"' >> $file;
+    echo IACCEPTSQLSERVERLICENSETERMS='"<%= @iacceptsqlserverlicenseterms %>"' >> $file;
+    
+    echo FEATURES='"<%= @features %>"' >> $file;
+
+    if( "<%= @instancename %>" -ne ""){ echo INSTANCENAME='"<%= @instancename %>"' >> $file;}else{echo INSTANCENAME='"MSSQLSERVER"' >> $file;}
+    if( "<%= @instanceid %>" -ne ""){ echo INSTANCEID='"<%= @instanceid %>"' >> $file; }
+    if( "<%= @instancedir %>" -ne ""){ echo INSTANCEDIR='"<%= @instancedir %>"' >> $file; }
+}elseif($action -eq 'RunDiscovery'){
+echo ';SQL Server 2012 - params' > $file
+echo [OPTIONS] >> $file
+echo '; Default parameters' >> $file
+echo ACTION='"<%= @action %>"' >> $file
+}else{
+ exit 1
+}

@@ -34,7 +34,6 @@ class windows_sql::install(
       command  => "\\setup.exe /CONFIGURATIONFILE='${configurationfile}';",
       cwd      => "$sqlpath",
       path     => "$sqlpath",
-      require  => [File["$configurationfile"]],
       provider => 'powershell',
       onlyif   => 'C:\\checkifinstall.ps1',
       timeout  => 0,
@@ -50,7 +49,7 @@ class windows_sql::install(
     }		
 	exec{"${action} SQL":
       command  => 'C:\\install.ps1;',
-      require  => [ File['C:\install.ps1'],File["$configurationfile"]],
+      require  => [ File['C:\install.ps1']],
       onlyif   => 'C:\\checkifinstall.ps1',
       provider => 'powershell',
       timeout  => 0,
