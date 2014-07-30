@@ -81,6 +81,18 @@ INSTANCEDIR="<%= @instancedir %>"
 <% end %>
 
 <% if @action != 'Uninstall' %>
+<% if !@sqltempdbdir.empty? %>
+; Information for SQL Engine - TempDB
+SQLTEMPDBDIR="<%= @sqltempdbdir %>"
+SQLTEMPDBLOGDIR="<%= @sqltempdblogdir %>"
+<% end %>
+
+<% if !@sqluserdbdir.empty? %>
+; Information for SQL Engine - User Database
+SQLUSERDBDIR="<%= @sqluserdbdir %>"
+SQLUSERDBLOGDIR="<%= @sqluserdblogdir %>"
+<% end %>
+
 <% if !@agtsvcaccount.empty? %>
 ; Information for SQL Agent
 AGTSVCACCOUNT="<%= `powershell write-host $env:userdomain -nonewline` %>\<%= @agtsvcaccount %>"
