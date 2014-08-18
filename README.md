@@ -14,11 +14,10 @@ This module have been tested with puppet open source v3.5.1 and v3.6.2, the pupp
 Should work since version 3.5.1 of puppet
 
 ## Last Fix/Update
-v 0.0.3 Module creation:
- - Support puppetmaster mode
- - Removed unused templates
- - Add $mode variable. Allow you to choose between master mode or agent mode.
- - Availability to get password from xml when mode = agent and mode = master is used.
+v 0.0.4 :
+ - Changed powershell module to puppetlabs/powershell
+ - Add tempDB et userdb parameters in config.erb by [Hobbit71](https://github.com/Hobbit71)
+ - Add same variable to config.ps
  
 ## Generate configurationfile.ini
 Generate Microsoft SQL Server 2012 file configuration from parameters you define.
@@ -30,10 +29,10 @@ The user domain doesn't need to be provided, it will be supplied by the $env:use
 
 ## Setup Requirements
 Depends on the following modules:
- - ['joshcooper/powershell', '>=0.0.6'](https://forge.puppetlabs.com/joshcooper/powershell),
+ - ['puppetlabs/powershell', '>=1.0.2'](https://forge.puppetlabs.com/puppetlabs/powershell),
  - ['puppetlabs/stdlib', '>= 4.2.1'](https://forge.puppetlabs.com/puppetlabs/stdlib).
  + Optional
-   - ['jriviere/windows_isos', '>= 0.0.3'](https://forge.puppetlabs.com/jriviere/windows_isos) (if you supply $isopath variable),
+   - ['jriviere/windows_isos', '>= 0.0.4'](https://forge.puppetlabs.com/jriviere/windows_isos) (if you supply $isopath variable),
    - ['jriviere/windows_ad', '>= 0.1.2'](https://forge.puppetlabs.com/jriviere/windows_ad)] (fill password automatically for each account specified with this module and with his xml file)
 
 ## Example

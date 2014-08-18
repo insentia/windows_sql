@@ -57,6 +57,18 @@ if($action -eq 'Install'){   ##install
     if( "<%= @instanceid %>" -ne ""){ echo INSTANCEID='"<%= @instanceid %>"' >> $file; }
     if( "<%= @instancedir %>" -ne ""){ echo INSTANCEDIR='"<%= @instancedir %>"' >> $file; }
 
+    if( "<%= @sqltempdbdir %>" -ne "")
+    {
+      echo SQLTEMPDBDIR='"<%= @sqltempdbdir %>"' >> $file; 
+      echo SQLTEMPDBLOGDIR='"<%= @sqltempdblogdir %>"' >> $file; 
+    }
+
+    if( "<%= @sqluserdbdir %>" -ne "")
+    {
+      echo SQLUSERDBDIR='"<%= @sqluserdbdir %>"' >> $file; 
+      echo SQLUSERDBLOGDIR='"<%= @sqluserdblogdir %>"' >> $file; 
+    }
+
     if( "<%= @agtsvcaccount %>" -ne ""){
         echo AGTSVCACCOUNT="""$env:userdomain\<%= @agtsvcaccount %>""" >> $file;
         echo AGTSVCPASSWORD="""$agtpwd""" >> $file;
