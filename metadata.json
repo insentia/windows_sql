@@ -1,24 +1,15 @@
 {
   "name": "jriviere-windows_sql",
-  "version": "0.0.3",
-  "source": "https://github.com/ninja-2/windows_sql",
+  "version": "0.0.4",
   "author": "jriviere",
-  "license": "Apache License, Version 2.0",
   "summary": "Module for Installation and configuration of SQL Server 2012",
+  "license": "Apache License, Version 2.0",
+  "source": "https://github.com/insentia/windows_sql",
+  "project_page": "https://github.com/insentia/windows_sql",
+  "issues_url": "https://github.com/insentia/windows_sql/issues",
   "description": "Module for Installation and configuration of SQL Server 2012",
-  "project_page": "https://github.com/ninja-2/windows_sql",
-  "dependencies": [
-    {
-      "name": "joshcooper/powershell",
-      "version_requirement": ">=0.0.6"
-    },
-    {
-      "name": "puppetlabs/stdlib",
-      "version_requirement": ">= 4.2.1"
-    }
-  ],
   "types": [
-
+  
   ],
   "operatingsystem_support": [
     {
@@ -38,5 +29,15 @@
     "templates/configps.erb": "cc6b52bd9221ea749edc033c65bfe8f2",
     "templates/install.erb": "aebaa846a63ac0ef7a3f27e5f72b59a0",
     "tests/init.pp": "5a561d31ee2ca48295b4722b203600b1"
-  }
+  },
+  "dependencies": [
+    {
+      "name": "puppetlabs/powershell",
+      "version_requirement": ">=0.0.7"
+    },
+    {
+      "name": "puppetlabs/stdlib",
+      "version_requirement": ">= 4.2.1"
+    }
+  ]
 }
