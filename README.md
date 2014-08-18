@@ -29,7 +29,7 @@ The user domain doesn't need to be provided, it will be supplied by the $env:use
 
 ## Setup Requirements
 Depends on the following modules:
- - ['puppetlabs/powershell', '>=1.0.2'](https://forge.puppetlabs.com/joshcooper/powershell),
+ - ['puppetlabs/powershell', '>=1.0.2'](https://forge.puppetlabs.com/puppetlabs/powershell),
  - ['puppetlabs/stdlib', '>= 4.2.1'](https://forge.puppetlabs.com/puppetlabs/stdlib).
  + Optional
    - ['jriviere/windows_isos', '>= 0.0.4'](https://forge.puppetlabs.com/jriviere/windows_isos) (if you supply $isopath variable),

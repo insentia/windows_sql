@@ -1,10 +1,10 @@
 {
-  "README.md": "1aba54dc1a14e00980c4cf770c696868",
+  "README.md": "7ed35aac9be3d3e908f5267ef9a355d5",
   "manifests/autocomplete.pp": "4f70fef858c575a0910447a1ebdcdef2",
   "manifests/init.pp": "79aae5ba68376148b574d08ceb358e79",
   "manifests/install.pp": "ba2a70a39308f8f66e5149a6e0117d02",
   "manifests/params.pp": "a20f746824ee77954421f55fd3e2a276",
-  "metadata.json": "d5fbe97aabcad736639abdf97f086d42",
+  "metadata.json": "1f2fe52b7c580a9dc1f873ab61e2f02d",
   "spec/spec_helper.rb": "09ccbe4bbe4503df6281e6ec7977973d",
   "templates/checkifinstall.erb": "0a8d78514c80d0e28d6457bf1125df23",
   "templates/config.erb": "8ad251b2618aab152c14313164924162",
