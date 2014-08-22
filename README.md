@@ -14,10 +14,8 @@ This module have been tested with puppet open source v3.5.1 and v3.6.2, the pupp
 Should work since version 3.5.1 of puppet
 
 ## Last Fix/Update
-v 0.0.4 :
- - Changed powershell module to puppetlabs/powershell
- - Add tempDB et userdb parameters in config.erb by [Hobbit71](https://github.com/Hobbit71)
- - Add same variable to config.ps
+v 0.0.5 :
+ - Fix Ordering issues
  
 ## Generate configurationfile.ini
 Generate Microsoft SQL Server 2012 file configuration from parameters you define.
