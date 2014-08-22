@@ -195,8 +195,8 @@ class windows_sql (
       isopath  => $isopath,
       xmlpath  => $xmlpath,
     }
-    Windows_isos['SQLServer'] -> Class['windows_sql::params'] -> Class['windows_sql::install']
+    anchor {'windows_sql::begin':} -> Windows_isos['SQLServer'] -> Class['windows_sql::params'] -> Class['windows_sql::install'] -> anchor {'windows_sql::end':}
   }else{
-    Class['windows_sql::params'] -> Class['windows_sql::install']
+    anchor {'windows_sql::begin':} -> Class['windows_sql::params'] -> Class['windows_sql::install'] -> anchor {'windows_sql::end':}
   }
 }

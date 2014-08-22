@@ -14,7 +14,7 @@ This module have been tested with puppet open source v3.5.1 and v3.6.2, the pupp
 Should work since version 3.5.1 of puppet
 
 ## Last Fix/Update
-v 0.0.5 :
+v 0.0.6 :
  - Fix Ordering issues
  
 ## Generate configurationfile.ini
