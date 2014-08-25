@@ -1,6 +1,6 @@
 {
   "name": "jriviere-windows_sql",
-  "version": "0.0.6",
+  "version": "0.0.7",
   "author": "jriviere",
   "summary": "Module for Installation and configuration of SQL Server 2012",
   "license": "Apache License, Version 2.0",

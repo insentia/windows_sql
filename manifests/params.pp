@@ -184,6 +184,7 @@ class windows_sql::params (
       provider => powershell,
       command  => "$configurationfile.ps1",
       require  => File["$configurationfile.ps1"],
+      onlyif   => "if((test-path '$configurationfile') -eq 'true'){exit 1;}",
     }
     File["$configurationfile.ps1"] -> Exec["Generate $configurationfile"]
   }else{

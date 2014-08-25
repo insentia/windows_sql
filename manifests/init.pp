@@ -100,7 +100,7 @@ class windows_sql (
   
   $userxml                        = 'C:\\users.xml',              #path of users xml file for load automatically his password
   $mode                           = 'agent',                      # mode for getting back from xml the svc account password. Default 'agent'. Other value 'master'
-  
+  $forcerestart                   = true,
   ## Installation parameters
   $sqlpath                        = '',
   $isopath                        = '',                           # work with xmlpath can't be set in same time that sqlpath
@@ -187,6 +187,7 @@ class windows_sql (
     xmlpath           => $xmlpath,
     configurationfile => $configurationfile,
     action            => $action,
+    forcerestart      => $forcerestart,
   }
 
   if(!empty($isopath)){

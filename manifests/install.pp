@@ -24,7 +24,9 @@ class windows_sql::install(
   $xmlpath           = $xmlpath,
   $configurationfile = $configurationfile,
   $action            = $action,
+  $forcerestart      = $forcerestart,
 ){
+  validate_bool($forcerestart)
   if(!empty($sqlpath)){
     $path = $sqlpath
     file{'C:\checkifinstall.ps1':
@@ -48,7 +50,7 @@ class windows_sql::install(
       require  => Windows_isos['SQLServer'],
     }
     exec{"${action} SQL":
-      command  => 'C:\\install.ps1;',
+      command  => "C:\\install.ps1; if('${forcerestart}' -eq 'true'){Restart-Computer -force}",
       require  => [ File['C:\install.ps1']],
       onlyif   => 'C:\\checkifinstall.ps1',
       provider => 'powershell',
