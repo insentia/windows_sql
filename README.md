@@ -2,7 +2,6 @@ windows_sql
 
 This is the windows_sql puppet module.
 
-
 ##Description
 
 This module allows you to generate and install SQL Server 2012 on windows Server.
@@ -14,10 +13,8 @@ This module have been tested with puppet open source v3.5.1 and v3.6.2, the pupp
 Should work since version 3.5.1 of puppet
 
 ## Last Fix/Update
-v 0.0.4 :
- - Changed powershell module to puppetlabs/powershell
- - Add tempDB et userdb parameters in config.erb by [Hobbit71](https://github.com/Hobbit71)
- - Add same variable to config.ps
+v 0.0.7 :
+ - Add restart parameter when you install/uninstall SQL Server
  
 ## Generate configurationfile.ini
 Generate Microsoft SQL Server 2012 file configuration from parameters you define.
@@ -95,6 +92,7 @@ Common parameter (default value)
 	iacceptsqlserverlicenseterms # true
 	enableranu                   # false
 	filestreamlevel              # 0
+	forcerestart                 # Default : true
  
 
 Other parameter
@@ -108,15 +106,15 @@ Other parameter
 
 If you declare the users with windows_ad::users in the same manifest of windows_sql Class, a error will occur and will inform you that you haven't provide a password.
 You need to declare your users first and then declare your SQL class (users must exist in AD before calling SQL class). 
-	
+
 License
 -------
 Apache License, Version 2.0
 
 Contact
 -------
-[Jerome RIVIERE](http://www.jerome-riviere.re)
+[Jerome RIVIERE](https://github.com/ninja-2)
 
 Support
 -------
-Please log tickets and issues on [GitHub](https://github.com/ninja-2/windows_sql/issues)
+Please log tickets and issues on [GitHub](https://github.com/insentia/windows_sql/issues)

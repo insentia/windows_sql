@@ -24,13 +24,15 @@ class windows_sql::install(
   $xmlpath           = $xmlpath,
   $configurationfile = $configurationfile,
   $action            = $action,
+  $forcerestart      = $forcerestart,
 ){
+  validate_bool($forcerestart)
   if(!empty($sqlpath)){
     $path = $sqlpath
     file{'C:\checkifinstall.ps1':
       content => template('windows_sql/checkifinstall.erb'),
-    }	
-	exec{"${action} SQL":
+    }
+    exec{"${action} SQL":
       command  => "\\setup.exe /CONFIGURATIONFILE='${configurationfile}';",
       cwd      => "$sqlpath",
       path     => "$sqlpath",
@@ -41,14 +43,14 @@ class windows_sql::install(
   }elsif(!empty($isopath) and !empty(xmlpath)){
     file{'C:\install.ps1':
       content => template('windows_sql/install.erb'),
-	  require  => Windows_isos['SQLServer'],
+      require  => Windows_isos['SQLServer'],
     }
     file{'C:\checkifinstall.ps1':
       content => template('windows_sql/checkifinstall.erb'),
-	  require  => Windows_isos['SQLServer'],
-    }		
-	exec{"${action} SQL":
-      command  => 'C:\\install.ps1;',
+      require  => Windows_isos['SQLServer'],
+    }
+    exec{"${action} SQL":
+      command  => "C:\\install.ps1; if('${forcerestart}' -eq 'true'){Restart-Computer -force}",
       require  => [ File['C:\install.ps1']],
       onlyif   => 'C:\\checkifinstall.ps1',
       provider => 'powershell',

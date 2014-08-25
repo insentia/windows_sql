@@ -100,7 +100,7 @@ class windows_sql (
   
   $userxml                        = 'C:\\users.xml',              #path of users xml file for load automatically his password
   $mode                           = 'agent',                      # mode for getting back from xml the svc account password. Default 'agent'. Other value 'master'
-  
+  $forcerestart                   = true,
   ## Installation parameters
   $sqlpath                        = '',
   $isopath                        = '',                           # work with xmlpath can't be set in same time that sqlpath
@@ -185,8 +185,9 @@ class windows_sql (
     sqlpath           => $sqlpath,
     isopath           => $isopath,
     xmlpath           => $xmlpath,
-	configurationfile => $configurationfile,
-	action            => $action,
+    configurationfile => $configurationfile,
+    action            => $action,
+    forcerestart      => $forcerestart,
   }
 
   if(!empty($isopath)){
@@ -195,12 +196,8 @@ class windows_sql (
       isopath  => $isopath,
       xmlpath  => $xmlpath,
     }
-    if($mode == 'agent'){
-	  File["$configurationfile"] -> Windows_isos['SQLServer'] -> Class['windows_sql::install']
-    }elsif($mode == 'master'){
-      File["$configurationfile.ps1"] -> Windows_isos['SQLServer'] -> Class['windows_sql::install']
-    }else{}
+    anchor {'windows_sql::begin':} -> Windows_isos['SQLServer'] -> Class['windows_sql::params'] -> Class['windows_sql::install'] -> anchor {'windows_sql::end':}
   }else{
-    File["$configurationfile"] -> Class['windows_sql::install']
+    anchor {'windows_sql::begin':} -> Class['windows_sql::params'] -> Class['windows_sql::install'] -> anchor {'windows_sql::end':}
   }
 }

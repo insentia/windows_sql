@@ -1,6 +1,6 @@
 {
   "name": "jriviere-windows_sql",
-  "version": "0.0.4",
+  "version": "0.0.7",
   "author": "jriviere",
   "summary": "Module for Installation and configuration of SQL Server 2012",
   "license": "Apache License, Version 2.0",
@@ -33,7 +33,7 @@
   "dependencies": [
     {
       "name": "puppetlabs/powershell",
-      "version_requirement": ">=0.0.7"
+      "version_requirement": ">=1.0.2"
     },
     {
       "name": "puppetlabs/stdlib",
