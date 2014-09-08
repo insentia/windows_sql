@@ -1,0 +1,59 @@
+IF NOT EXISTS (SELECT * FROM msdb.dbo.sysjobs WHERE [name] = '<%= @jobname %>')
+BEGIN
+USE msdb ;
+
+DECLARE @job_name nvarchar(max)
+SET @job_name = '<%= @jobname %>';
+
+DECLARE @ScheduleName nvarchar(max)
+SET @ScheduleName = '<%= @schedulename %>';
+
+DECLARE @DatabasesName nvarchar(max)
+SET @DatabasesName = '<%= @databases %>';
+
+DECLARE @NoIndex nvarchar(max)
+SET @NoIndex = '<%= @noindex %>';
+
+DECLARE @checkcommands nvarchar(max)
+SET @checkcommands = '<%= @checkcommands %>';
+
+DECLARE @scheduletime INT
+SET @scheduletime = '<%= @scheduletime %>';
+
+DECLARE @freq_type nvarchar(max)
+SET @freq_type = '<%= @freq_type_code %>';
+
+DECLARE @freq_interval nvarchar(max)
+SET @freq_interval = '<%= @freq_interval_code %>';
+
+
+DECLARE @TokenServer nvarchar(max)
+SET @TokenServer = '$' + '(ESCAPE_SQUOTE(SRVR))';
+
+DECLARE @JobCommand01 nvarchar(max)
+SET @JobCommand01 = N'sqlcmd -E -S ' + @TokenServer + ' -d master -Q "EXECUTE dbo.DatabaseIntegrityCheck @Databases = '''+@DatabasesName+''', @CheckCommands = '''+@checkcommands+''', @NoIndex = '''+@NoIndex+'''; " -b';
+
+	EXEC dbo.sp_add_job
+		@job_name = @job_name,
+		@description = 'Job Created by PUPPET', 
+		@category_name = 'Database Maintenance';
+
+	EXEC sp_add_jobstep
+		@job_name = @job_name,
+		@step_name = @job_name,
+		@subsystem = 'CMDEXEC',
+		@command = @JobCommand01;
+
+	EXEC dbo.sp_add_schedule
+		@schedule_name = @ScheduleName,
+		@freq_type = @freq_type,
+		@freq_interval = @freq_interval,
+		@active_start_time = @scheduletime ;
+
+	EXEC sp_attach_schedule
+	   @job_name = @job_name,
+	   @schedule_name = @ScheduleName;
+
+	EXEC dbo.sp_add_jobserver
+		@job_name = @job_name;
+END

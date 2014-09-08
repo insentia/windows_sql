@@ -1,13 +1,13 @@
 {
   "name": "jriviere-windows_sql",
-  "version": "0.0.7",
+  "version": "0.0.8",
   "author": "jriviere",
   "summary": "Module for Installation and configuration of SQL Server 2012",
   "license": "Apache License, Version 2.0",
   "source": "https://github.com/insentia/windows_sql",
   "project_page": "https://github.com/insentia/windows_sql",
   "issues_url": "https://github.com/insentia/windows_sql/issues",
-  "description": "Module for Installation and configuration of SQL Server 2012",
+  "description": "Module for Installation and configuration of SQL Server 2012. You can also manage maintenance of your databases",
   "types": [
   
   ],

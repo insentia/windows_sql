@@ -4,7 +4,7 @@ This is the windows_sql puppet module.
 
 ##Description
 
-This module allows you to generate and install SQL Server 2012 on windows Server.
+This module allows you to generate and install SQL Server 2012 on windows Server. You can also configure maintenance plan.
 
 This module have been tested with SQL Server 2012 SP1 on Windows Server 2012 R2.
 Should work, on Windows Server since 2012 and with SQL Server since 2012.
@@ -13,11 +13,15 @@ This module have been tested with puppet open source v3.5.1 and v3.6.2, the pupp
 Should work since version 3.5.1 of puppet
 
 ## Last Fix/Update
-v 0.0.7 :
- - Add restart parameter when you install/uninstall SQL Server
+v 0.0.8 :
+ - Support Maintenance JOB with [OLA HALLENGREN](https://ola.hallengren.com/) SQL script
+ - Can do backup
+ - Can do integrity checkcommands
+ - Can do optimize index
+ - Can delete old backup file
  
 ## Generate configurationfile.ini
-Generate Microsoft SQL Server 2012 file configuration from parameters you define.
+Generate Microsoft SQL Server 2012 file confsiguration from parameters you define.
 If you create your service account with [windows_ad module](https://forge.puppetlabs.com/jriviere/windows_ad) and his xml file before calling the windows_sql class the password for each service account will be automatically retrieve from the users.xml file, 
 else you can provide manually your password.
 All password manually provided have priority on xml password.
@@ -102,6 +106,68 @@ Other parameter
 	sqlpath            # for Drive use E:\\, for directory use C:\SQL where SQL is the folder that contains setup.exe
 	mode               # the way how you want to deploy SQL, by using a master or only a agent. Default value agent.
 ```	
+
+##Plan Backup JOB
+Resource: windows_sql::maintenanceplan::backup
+```
+	windows_sql::maintenance::backup{'full':
+	  backuptype   => 'FULL',
+	  databases    => 'USER_DATABASES',
+	  servername   => 'srvsql01',
+	  jobname      => 'Full Backup - USER_Databases',
+	  scheduletime => '021900',
+	  schedulename => 'Daily Backup - Backup',
+	  freq_type    => 'Daily'
+	}
+	windows_sql::maintenance::integritycheck{'integrity':
+	  noindex      => 'N',
+	  databases    => 'USER_DATABASES',
+	  servername   => 'srvsql01',
+	  jobname      => 'Check Integrity - USER_DATABASES',
+	  scheduletime => '021100',
+	  schedulename => 'Daily Backup - Integrity',
+	  freq_type    => 'Daily'
+	}
+	windows_sql::maintenance::indexoptimize{'indexop':
+	  databases    => 'USER_DATABASES',
+	  servername   => 'srvsql01',
+	  jobname      => 'Index Optimize - USER_DATABASES',
+	  scheduletime => '023000',
+	  schedulename => 'Daily Backup - Index Optimize',
+	  freq_type    => 'Daily'
+	}
+	windows_sql::maintenance::deletebackuphistory{'delete':
+	  servername   => 'srvsql01',
+	  jobname      => 'Delete Backup History',
+	  scheduletime => '030000',
+	  schedulename => 'Daily Backup - Delete History',
+	  freq_type    => 'Daily'
+	}
+```
+Parameters:
+```
+	$databases           # Database to maintain
+	$directory           # Directory to save backup
+	$backuptype          # FULL, LOG, DIFF. Default FULL
+	$verify              # 'N' or 'Y'
+	$compress            # 'Y' or 'N'
+	$servername          # 
+	$fragmentationlow    # 'NULL',
+	$fragmentationmedium # 'INDEX_REORGANIZE,INDEX_REBUILD_ONLINE,INDEX_REBUILD_OFFLINE',
+	$fragmentationhigh   # 'INDEX_REBUILD_ONLINE,INDEX_REBUILD_OFFLINE',
+	$fragmentationlevel1 # 5,
+	$fragmentationlevel2 # 30,
+	$noindex             # 'N' or 'Y', don't create index ?
+	$checkcommands       # List of Available commands on ola hallengren site
+	$scriptpath          # Where to save the maintenance script. Default C:\\Puppet-SQL
+	$jobname             # Job Name
+	$scheduletime        # Time to execute ex : 020000 -> exec at 02am
+	$schedulename        # Scheduled name
+	$freq_type           # Can be once, daily, Weekly, Monthly
+	$freq_freq_interval  # Can be empty or any days of the week
+	$daystokeep          # Number of days to keep backup. Default 7 (one week).
+```
+
 ## Known issues
 
 If you declare the users with windows_ad::users in the same manifest of windows_sql Class, a error will occur and will inform you that you haven't provide a password.
