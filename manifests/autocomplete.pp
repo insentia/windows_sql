@@ -14,28 +14,28 @@ $userxml        = $windows_sql::params::userxml,
   if(!empty($agtsvcaccount)){
     if(!empty($agtsvcpassword)){
       $agtpwd = $agtsvcpassword
-	}else{
+    }else{
       $agtpwd = get_password($agtsvcaccount,$userxml)
     }
   }
   if(!empty($sqlsvcaccount)){
     if(!empty($sqlsvcpassword)){
       $sqlpwd = $sqlsvcpassword
-	}else{
+    }else{
       $sqlpwd = get_password($sqlsvcaccount,$userxml)
     }
   }
   if(!empty($rssvcaccount)){
     if(!empty($rssvcpassword)){
       $rspwd = $rssvcpassword
-	}else{
+    }else{
       $rspwd = get_password($rssvcaccount,$userxml)
     }
   }
   if(!empty($issvcaccount)){
     if(!empty($issvcpassword)){
       $ispwd = $issvcpassword
-	}else{
+    }else{
       $ispwd = get_password($issvcaccount,$userxml)
     }
   }
