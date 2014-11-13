@@ -33,7 +33,7 @@ class windows_sql::install(
       content => template('windows_sql/checkifinstall.erb'),
     }
     exec{"${action} SQL":
-      command  => "\\setup.exe /CONFIGURATIONFILE='${configurationfile}';",
+      command  => "setup.exe /CONFIGURATIONFILE='${configurationfile}';",
       cwd      => "$sqlpath",
       path     => "$sqlpath",
       provider => 'powershell',
