@@ -41,17 +41,12 @@ class windows_sql::install(
       timeout  => 0,
     }
   }elsif(!empty($isopath) and !empty(xmlpath)){
-    file{'C:\install.ps1':
-      content => template('windows_sql/install.erb'),
-      require  => Windows_isos['SQLServer'],
-    }
     file{'C:\checkifinstall.ps1':
       content => template('windows_sql/checkifinstall.erb'),
       require  => Windows_isos['SQLServer'],
     }
     exec{"${action} SQL":
-      command  => "C:\\install.ps1; if('${forcerestart}' -eq 'true'){Restart-Computer -force}",
-      require  => [ File['C:\install.ps1']],
+      command  => "\$letter = \$null;if(test-path '${xmlpath}'){[xml]\$xml = New-Object system.Xml.XmlDocument;[xml]\$xml = Get-Content '${xmlpath}';foreach(\$iso in \$xml.configuration.isos.iso){if(\$iso.ImagePath -eq '${isopath}'){\$letter = \$iso.DriveLetter;}}if(\$letter -ne \$null){Push-Location;cd \$letter':';.\\setup.exe /CONFIGURATIONFILE='${configurationfile}';Pop-Location;}}{exit 0;}",
       onlyif   => 'C:\\checkifinstall.ps1',
       provider => 'powershell',
       timeout  => 0,

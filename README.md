@@ -13,12 +13,10 @@ This module have been tested with puppet open source v3.5.1 and v3.6.2, the pupp
 Should work since version 3.5.1 of puppet
 
 ## Last Fix/Update
-v 0.0.8 :
- - Support Maintenance JOB with [OLA HALLENGREN](https://ola.hallengren.com/) SQL script
- - Can do backup
- - Can do integrity checkcommands
- - Can do optimize index
- - Can delete old backup file
+v 0.0.9 :
+ - Pull request 4 from StefanSchoof/master
+ - Add pid when use master mode. (powershell)
+ - Fix execution of installation script when using master mode
  
 ## Generate configurationfile.ini
 Generate Microsoft SQL Server 2012 file confsiguration from parameters you define.
