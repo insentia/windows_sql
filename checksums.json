@@ -1,5 +1,5 @@
 {
-  "README.md": "fff74aad2c44dd8dd0ff64252b912feb",
+  "README.md": "d59755accd4d496be0f6ffc86d9188c3",
   "files/CommandExecute.sql": "ed275ef6baa0c501b90e5cbbcf908400",
   "files/DatabaseBackup.sql": "b08f6a86c71e8676a3b5bc535bd93f53",
   "files/DatabaseIntegrityCheck.sql": "cd394c7df580e73dd6f6718e9ce6fc6f",
@@ -7,13 +7,13 @@
   "files/MaintenanceSolution.sql": "4277b4316ff77cfeaa223603dc80a30e",
   "manifests/autocomplete.pp": "0970f280b6f7f383f7a162e16557cef0",
   "manifests/init.pp": "68a0cd6193a8d37e7c1d87e2e8201481",
-  "manifests/install.pp": "231466d5b3924110871a234ea180c01e",
+  "manifests/install.pp": "26a9bda1cc7f271eff8233fd78b0ffdd",
   "manifests/maintenance/backup.pp": "1d85732f890273d0050263ebc056ffb5",
   "manifests/maintenance/deletebackuphistory.pp": "8d0c10ec9cb3b9c73bd6093dba2ccf6a",
   "manifests/maintenance/indexoptimize.pp": "b5d26a34a7bd6c641061e1ced433c3cc",
   "manifests/maintenance/integritycheck.pp": "1277cecf1d265f5efedf923f8ab9624e",
   "manifests/params.pp": "e5cc4e838fc5b210848fbb13e57e4841",
-  "metadata.json": "c57a8b107a216abd1f5d7c163de0ddcb",
+  "metadata.json": "f30d84630e21fdaed1d2eceeb979014b",
   "spec/spec_helper.rb": "09ccbe4bbe4503df6281e6ec7977973d",
   "templates/BackupDatabase.sql.erb": "fcb46fb470d3cd63892643137b37500d",
   "templates/DatabaseIntegrityCheck.sql.erb": "3919de46180872b22252158477643b13",
@@ -21,7 +21,7 @@
   "templates/IndexOptimize.sql.erb": "75a71ea584fdee426eefd041161d789b",
   "templates/checkifinstall.erb": "0a8d78514c80d0e28d6457bf1125df23",
   "templates/config.erb": "8ad251b2618aab152c14313164924162",
-  "templates/configps.erb": "00e8420018638caf330673d9b364c0a9",
+  "templates/configps.erb": "3270d826a59c2194ce27e6ecdb656db5",
   "templates/install.erb": "aebaa846a63ac0ef7a3f27e5f72b59a0",
   "tests/init.pp": "5a561d31ee2ca48295b4722b203600b1"
 }

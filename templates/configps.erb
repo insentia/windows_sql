@@ -29,7 +29,8 @@ if($action -eq 'Install'){   ##install
     echo QUIET='"<%= @quiet %>"' >> $file;
     echo QUIETSIMPLE='"<%= @quietsimple %>"' >> $file;
     echo X86='"<%= @x86 %>"' >> $file;
-
+    if( "<%= @pid %>" -ne ""){ echo PID='"<%= @pid %>"' >> $file; }
+    
     if( "<%= @uimode %>" -ne ""){ echo UIMODE='"<%= @uimode %>"' >> $file; }
 
     echo SQMREPORTING='"<%= @sqmreporting %>"'
